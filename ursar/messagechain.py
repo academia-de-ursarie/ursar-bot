@@ -2,7 +2,9 @@ import re
 import inspect
 
 class MessageChain():
+
     _chain = {}
+    
     def on_message(self, message):
         def fun(original_function):
             self._chain[message] = original_function
