@@ -12,4 +12,4 @@ class UrsarBot(SkypeEventLoop):
         if isinstance(event, SkypeNewMessageEvent) and not event.msg.userId == self.userId:
             messageToSend = messageChain.run(event.msg.content.lower())
             if messageToSend:
-                event.msg.chat.sendMsg(messageToSend)
+                event.msg.chat.sendMsg(messageToSend, rich=True)
