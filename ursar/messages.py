@@ -1,4 +1,5 @@
 import requests
+from xml.etree import ElementTree
 
 from .messagechain import MessageChain
 
@@ -36,3 +37,13 @@ def dex(matches):
         else:
             return 'Nici un rezultat'
     return 'Ceva merge prost. Mai incearca.'
+
+@messageChain.on_message("^curs (\w{3})$")
+def currency(matches):
+    coin = matches.group(1)
+    response = requests.get("http://openexchangerates.appspot.com/currency?from=%s&to=RON&q=1" % coin)
+    if response and response.status_code == 200:
+        json = response.json()
+        if 'rate' in json:
+            return "%s valoreaza %.2f RON" % (coin.upper(), float(json['rate']))
+    return 'Ceva merge prost. Mai incearca'
