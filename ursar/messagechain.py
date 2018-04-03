@@ -4,11 +4,16 @@ import inspect
 class MessageChain():
 
     _chain = {}
+    _man = []
     
     def on_message(self, message):
         def fun(original_function):
             self._chain[message] = original_function
         return fun
+
+    def man(self, doc):
+        self._man.append(doc)
+        return lambda fun: fun
 
     def run(self, message):
         for key, fn in self._chain.items():
@@ -20,3 +25,6 @@ class MessageChain():
                 else:
                     return fn()
         return None
+    
+    def get_man(self):
+        return self._man

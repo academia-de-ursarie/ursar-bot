@@ -5,15 +5,23 @@ from .messagechain import MessageChain
 
 messageChain = MessageChain()
 
+@messageChain.on_message('boot man')
+@messageChain.man('boot man')
+def man():
+    return '\n'.join(messageChain.get_man())
+
 @messageChain.on_message('ping')
+@messageChain.man('ping')
 def ping(matches):
     return 'pong'
 
 @messageChain.on_message('ursar')
+@messageChain.man('ursar')
 def ursar_hello():
     return 'qui est le plus ursar?'
 
 @messageChain.on_message('vremea in (.*)')
+@messageChain.man('vremea in :locatie')
 def weather(matches):
     location = matches.group(1)
     response = requests.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="%s")&format=json&env=store://datatables.org/alltableswithkeys&u=c' % location)
@@ -26,6 +34,7 @@ def weather(matches):
     return None
 
 @messageChain.on_message("dex (.*)")
+@messageChain.man('dex :cuvant')
 def dex(matches):
     word = matches.group(1)
     response = requests.get("https://dexonline.ro/definitie/%s?format=json" % word)
@@ -39,6 +48,7 @@ def dex(matches):
     return 'Ceva merge prost. Mai incearca.'
 
 @messageChain.on_message("^curs (\w{3})$")
+@messageChain.man('curs :moneda(EUR/USD...)')
 def currency(matches):
     coin = matches.group(1)
     response = requests.get("http://openexchangerates.appspot.com/currency?from=%s&to=RON&q=1" % coin)
