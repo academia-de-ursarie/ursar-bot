@@ -6,6 +6,10 @@ from .messagechain import MessageChain
 
 messageChain = MessageChain()
 
+@messageChain.on_message('man ursar')
+def man(matches):
+    return '\r\n'.join(messageChain._chain.keys())
+
 @messageChain.on_message('ping')
 def ping(matches):
     return 'pong'
