@@ -3,6 +3,6 @@ from ursar.decorators import respond_to
 
 class HelpPlugin(UrsarPlugin):
 
-    @respond_to("^help(?: (?P<plugin>.*))?$")
+    @respond_to('^help(?: (?P<plugin>.*))?$')
     def help(self, message, plugin=None):
-        return "Here's what I know how to do:"
+        return 'Here\'s what I know how to do:'
