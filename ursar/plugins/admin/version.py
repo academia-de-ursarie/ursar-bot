@@ -8,3 +8,7 @@ class VersionPlugin(UrsarPlugin):
     @respond_to('^version$')
     def version(self, message):
         return 'Running on v%s' % VERSION
+
+    @respond_to('^versiune$')
+    def version(self, message):
+        return 'Rulez v%s' % VERSION
