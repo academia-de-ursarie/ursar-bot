@@ -5,12 +5,12 @@ import requests
 
 class UrbanDictionaryPlugin(UrsarPlugin):
 
-    @respond_to("^urban dictionary (?P<word>.*)$")
-    def definition(self, message, word):
-        response = requests.get("http://api.urbandictionary.com/v0/define?term=%s" % word)
+    @respond_to('^urban dictionary (?P<word>.*?)(?: (?P<limit>\d+))?$')
+    def definition(self, message, word=None, limit=5):
+        response = requests.get('http://api.urbandictionary.com/v0/define?term=%s' % word)
         json = response.json()
         if json['result_type'] == 'exact':
-            all_definitions = [definition['definition'] for definition in json['list']]
+            all_definitions = [definition['definition'] for definition in json['list'][:int(limit)]]
             return '\n'.join(all_definitions)
         else:
-            return 'Nici un rezultat'
+            return 'No results.'
