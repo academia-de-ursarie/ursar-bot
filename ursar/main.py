@@ -72,7 +72,7 @@ class UrsarBot(SkypeEventLoop):
                         search_matches
                 ):
                     args = {'message' : event.msg.content}
-                    args.update(search_matches.groupdict())
+                    args.update({key:val for key, val in search_matches.groupdict().items() if val is not None})
                     messageToSend = listener['fn'](**args)
                     if messageToSend:
                         event.msg.chat.sendMsg(messageToSend, rich=True)
