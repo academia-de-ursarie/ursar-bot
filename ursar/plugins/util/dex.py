@@ -14,5 +14,5 @@ class DexPlugin(UrsarPlugin):
                 all_definitions = [definition['htmlRep'] for definition in json['definitions'][:int(limit)]]
                 return '\n'.join(all_definitions)
             else:
-                return 'Nici un rezultato results'
-        return 'Somethign went wrong. Try again.'
+                return 'No results'
+        return 'Something went wrong. Try again.'

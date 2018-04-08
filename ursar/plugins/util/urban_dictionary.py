@@ -8,9 +8,12 @@ class UrbanDictionaryPlugin(UrsarPlugin):
     @respond_to('^urban dictionary (?P<word>.*?)(?: (?P<limit>\d+))?$')
     def definition(self, message, word=None, limit=5):
         response = requests.get('http://api.urbandictionary.com/v0/define?term=%s' % word)
-        json = response.json()
-        if json['result_type'] == 'exact':
-            all_definitions = [definition['definition'] for definition in json['list'][:int(limit)]]
-            return '\n'.join(all_definitions)
-        else:
-            return 'No results.'
+        
+        if response and response.status_code == 200:
+            json = response.json()
+            if json['result_type'] == 'exact':
+                all_definitions = [definition['definition'] for definition in json['list'][:int(limit)]]
+                return '\n'.join(all_definitions)
+            else:
+                return 'No results.'
+        return 'Something went wrong. Try again.'
