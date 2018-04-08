@@ -1,2 +1,6 @@
-requests
 skpy
+requests
+fuzzywuzzy
+
+# requires gcc and other dependencies to be installed in the container
+# python-Levenshtein

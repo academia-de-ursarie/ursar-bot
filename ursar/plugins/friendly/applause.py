@@ -5,7 +5,7 @@ import random
 
 class ApplausePlugin(UrsarPlugin):
 
-    @hear("^(?P<sentiment>.*)(applause|applauze|aplauze|clap|bravo|felicitari)$")
+    @hear('^(?P<sentiment>.*)(applause|applauze|aplauze|clap|bravo|felicitari)$')
     def applause(self, message, sentiment=None):
         gif_url = None
 

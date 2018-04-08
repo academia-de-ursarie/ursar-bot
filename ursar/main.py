@@ -52,28 +52,23 @@ class UrsarBot(SkypeEventLoop):
         Handle Skype events
         '''
         if isinstance(event, SkypeNewMessageEvent) and not event.msg.userId == self.userId:
-            isGroupChatMessage = self.isGroupChat(event)
-            isMentionedInMessage = self.isMentioned(event)
+            inGroupChat = self.inGroupChat(event)
+            isMentioned = self.isMentioned(event)
 
-            if isMentionedInMessage:
+            if isMentioned:
                 event.msg.content = re.sub(r'\s*<at id="8:%s">.+?</at>\s*' % self.userId, '', event.msg.content)
 
             for listener in self.message_listeners:
                 search_matches = listener['regex'].search(event.msg.content)
-                if (
-                        (
-                            (listener['direct_mentions_only'] and (isMentionedInMessage or not isGroupChatMessage))
-                            or
-                            (not listener['direct_mentions_only'])
-                        )
+                if ((listener['direct_mentions_only'] and (isMentioned or not inGroupChat)) or not listener['direct_mentions_only']) and search_matches:
+                    try:
+                        args = {'message' : event.msg.content}
+                        args.update({key:val for key, val in search_matches.groupdict().items() if val is not None})
+                        messageToSend = listener['fn'](**args)
+                    except Exception as e:
+                        print ("Error while trying to execute %s: %s" % (listener['full_method_name'], e))
+                        messageToSend = 'An exception occured while trying to process your request.'
 
-                        and
-
-                        search_matches
-                ):
-                    args = {'message' : event.msg.content}
-                    args.update(search_matches.groupdict())
-                    messageToSend = listener['fn'](**args)
                     if messageToSend:
                         event.msg.chat.sendMsg(messageToSend, rich=True)
 
@@ -81,10 +76,9 @@ class UrsarBot(SkypeEventLoop):
         '''
         Determine if current user is mentioned in message
         '''
-        matches = re.search(r'\s*<at id="8:%s">.+?</at>\s*' % self.userId, event.msg.content)
-        return matches != None
+        return re.search(r'\s*<at id="8:%s">.+?</at>\s*' % self.userId, event.msg.content) != None
 
-    def isGroupChat(self, event):
+    def inGroupChat(self, event):
         '''
         Determine if current chat is a group chat
         '''
