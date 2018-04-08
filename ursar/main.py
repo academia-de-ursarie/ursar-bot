@@ -37,7 +37,8 @@ class UrsarBot(SkypeEventLoop):
                                     'function_name': function_name,
                                     'class_name': plugin['name'],
                                     'regex_pattern': meta['listener_regex'],
-                                    'regex': re.compile(meta['listener_regex']),
+                                    'regex': re.compile('%s%s' % (('(?i)','')[meta['case_sensitive']], meta['listener_regex'])),
+                                    "case_sensitive": meta["case_sensitive"],
                                     'fn': getattr(instance, function_name),
                                     'args': meta['listener_args'],
                                     'direct_mentions_only': meta['listens_only_to_direct_mentions']
