@@ -11,7 +11,7 @@ class UrsarBot(SkypeEventLoop):
     message_listeners = []
 
     def __init__(self):
-        super(UrsarBot, self).__init__(settings['SKYPE_USERNAME'], settings['SKYPE_PASSWORD'])
+        super(UrsarBot, self).__init__(settings['SKYPE_USERNAME'], settings['SKYPE_PASSWORD'], settings['SKYPE_TOKEN_FILE'])
         self.bootstrap_plugins()
 
     def bootstrap_plugins(self):
