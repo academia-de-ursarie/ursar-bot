@@ -1,6 +1,8 @@
 import os
 
-settings = {}
+settings = {
+    'SKYPE_TOKEN_FILE': 'skype_token'
+}
 
 # Import from environment
 for key, val in os.environ.items():
